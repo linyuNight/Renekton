@@ -4,6 +4,7 @@ import Index from '@/components/Index/Index'
 import Home from '@/components/Home/Home'
 import About from '@/components/About/About'
 import Chat from '@/components/Chat/Chat'
+import Chatroom from '@/components/Chatroom/Chatroom'
 import Account from '@/components/Account/Account'
 import Login from '@/components/Login/Login'
 import Regist from '@/components/Regist/Regist'
@@ -22,7 +23,14 @@ let router = new Router({
       children: [
         {
           path: '',
-          component: Home
+          component: Home,
+          // children: [
+          //   {
+          //     path: 'chatroom/:userId',
+          //     name: 'user',
+          //     component: Chatroom
+          //   }
+          // ]
         },
         {
           path: 'about',
@@ -48,7 +56,14 @@ let router = new Router({
                 }
               }
             })
-          }
+          },
+          children: [
+            {
+              path: 'chatroom/:roomId',
+              name: 'room',
+              component: Chatroom
+            }
+          ]
         },
         {
           path: 'account',

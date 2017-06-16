@@ -1,6 +1,7 @@
-#ÁÄÌì¼ÇÂ¼±í
+#èŠå¤©è®°å½•è¡¨
 CREATE TABLE chat_content(
     id int(11) unsigned NOT NULL auto_increment,
+    room_id VARCHAR(50) not null default '',
     name VARCHAR(50) not null default '',
     content text NOT NULL,
     status tinyint(1) not null default 0,

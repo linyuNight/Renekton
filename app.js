@@ -113,24 +113,6 @@ app.get('/', function(req, res){
   res.render("index",{title:'header'});
 });
 
-//加载数据
-// var chatlist = [];
-app.get('/chatdata', function(req, res){
-	var pathname = url.parse(req.url).query;
-	var num = pathname.split('=');
-	if(num!=null&&num!=undefined){
-		res.header("Access-Control-Allow-Origin", "*");
-		connection.query("select * from chat_content order by id desc limit " + (parseInt(num[1])) + "," + 1 , function selectTable(err, rows, fields){
-			if (err){
-				throw err;
-			}
-			if (rows){
-				res.json(rows)
-			}
-		});
-	}
-});
-
 // app.post('/enterroom', urlencodedParser, function(req, res){
 // 	res.header("Access-Control-Allow-Origin", "*");
 //   var roomname = req.body.roomname
@@ -154,40 +136,56 @@ let options = {//设置白名单
     a: ['href', 'title', 'target']
   }
 }
+
+var roomIDpre = ''
+var roomID = ''
+
 //socket接收和传输
 io.on('connection', function(socket){
 	var url = socket.request.headers.referer;
 	var splited = url.split('/');
-  var roomID = splited[splited.length - 1];   // 获取房间ID
+  roomID = splited[splited.length - 1];   // 获取房间ID
 	console.log(roomID)
 	let user = ''
 
 	socket.on('join',(username) => {
-		// user = username
-		// myroom = room[0]
-		// socket.join(myroom)
-
+		socket.leave(roomIDpre)
 		socket.join(roomID)
+		roomIDpre = roomID
 	})
 
-	// socket.on('join2',(username) => {
-	// 	user = username
-	// 	myroom = room[1]
-	// 	socket.join(myroom)
-	// })
+	//加载数据
+	socket.to(roomID).on('load message',function(msg, callback){
+		var num = msg;
+		if(num!=null&&num!=undefined){
+			let load_sql = "select * from chat_content where room_id=? order by id desc limit ?,1" 
+			let load_value = [roomID,num]
+			connection.query(load_sql, load_value, function selectTable(err, rows, fields){
+				if (err){
+					throw err;
+				}
+				if (rows){
+					callback(rows)
+				}
+			});
+		}
+	})
 
 	socket.to(roomID).on('chat message', function(msg, callback){
 		var content = xss(msg.content,options)
+		var sql = "insert into chat_content set room_id=?, name=?, content=?,create_time=UNIX_TIMESTAMP()"
+    var values = [roomID, msg.name, content];
 
-		var sql = "insert into chat_content set name=?, content=?,create_time=UNIX_TIMESTAMP()"
-    var values = [msg.name, content];
     connection.query(sql, values, function(error, results){
       if(error) {
           console.log("插入记录出错: " + error.message);
           connection.end();
           return;
       }
-      connection.query("select * from chat_content order by id desc limit 1" , function selectTable(err, rows, fields){
+      var select_sql = 'select * from chat_content where room_id=? order by id desc limit 1'
+      var select_values = [roomID]
+
+      connection.query(select_sql, select_values, function selectTable(err, rows, fields){
 				if (err){
 					throw err;
 				}
@@ -196,7 +194,6 @@ io.on('connection', function(socket){
 				}
 			});
     });
-    // callback()
 	});
 });
 
