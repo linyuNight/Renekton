@@ -18,19 +18,11 @@ let router = new Router({
   routes: [
     {
       path: '',
-      name: 'Index',
       component: Index,
       children: [
         {
           path: '',
-          component: Home,
-          // children: [
-          //   {
-          //     path: 'chatroom/:userId',
-          //     name: 'user',
-          //     component: Chatroom
-          //   }
-          // ]
+          component: Home
         },
         {
           path: 'about',

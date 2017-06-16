@@ -107,6 +107,19 @@ app.post('/aa', function(req, res){
   res.json({data:'data'});
 });
 
+app.get('/roomname', function(req, res){
+	res.header("Access-Control-Allow-Origin", "*");
+	let load_sql = "select * from chat_room order by id" 
+	connection.query(load_sql, function selectTable(err, rows, fields){
+		if (err){
+			throw err;
+		}
+		if (rows){
+			res.json(rows)
+		}
+	});
+})
+
 //主页面
 app.get('/', function(req, res){
   // res.sendFile(__dirname + '/myhome/dist/index.html');

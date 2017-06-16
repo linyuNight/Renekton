@@ -1,16 +1,7 @@
 <template>
   <div class="home clear">
   	<div class="home-contain">
-      <router-link :to="{ name: 'user', params: { userId: userId[0] }}"><div class="linkbtn">ttt1</div></router-link>
-      <router-link :to="{ name: 'user', params: { userId: userId[1] }}"><div class="linkbtn">ttt2</div></router-link>
-      <router-link :to="{ name: 'user', params: { userId: userId[2] }}"><div class="linkbtn">ttt3</div></router-link>
-      <router-link :to="{ name: 'user', params: { userId: userId[3] }}"><div class="linkbtn">ttt4</div></router-link>
-      <router-link :to="{ name: 'user', params: { userId: userId[4] }}"><div class="linkbtn">ttt5</div></router-link>
-      <router-link :to="{ name: 'user', params: { userId: userId[5] }}"><div class="linkbtn">ttt6</div></router-link>
-      <transition name="fade">
-        <router-view></router-view>
-      </transition>
-	  	<!-- <div class="home-tab-list">
+	  	<div class="home-tab-list">
 	  		<div class="home-tab">
 		    	<div class="tab-point"></div>
 		    </div>
@@ -25,7 +16,7 @@
 	  			<input type="text" placeholder="name">
 	  		</div>
 	  	</div>
-	  	<div class="drag" v-on:mousedown.stop="dragDown" v-on:mouseup.stop="dragUp" v-on:mousemove.stop="dragMove" v-bind:style="dragStyle"></div> -->
+	  	<div class="drag" v-on:mousedown.stop="dragDown" v-on:mouseup.stop="dragUp" v-on:mousemove.stop="dragMove" v-bind:style="dragStyle"></div>
 	  </div>
   </div>
 </template>

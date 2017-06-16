@@ -109,7 +109,7 @@ export default {
 
       setTimeout(() => {
         let h = $('._v-content').height()
-        this.$refs.scroller.scrollTo(0,h,true)
+        this.$refs.scroller.scrollTo(0,h)
       },200)
 
       socket.on('chat message', (msg) => {
